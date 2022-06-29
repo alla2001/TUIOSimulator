@@ -257,11 +257,7 @@ public class Surface : MonoBehaviour
                 }
                 else if (pointer.Type == Pointer.PointerType.Object)
                 {
-                    if (pointer.Id == MovementController.instance.id)
-                    {
-                        MovementController.instance.UpadteRotation(pointer);
-                    }
-
+                    print("OBJECT");
                     UpdateSurfaceObject(pointer as ObjectPointer, true);
                 }
             }
@@ -291,7 +287,6 @@ public class Surface : MonoBehaviour
                 else if (pointer.Type == Pointer.PointerType.Object)
                 {
                     UpdateSurfaceObject(pointer as ObjectPointer);
-                    if (pointer.Id ==)
                 }
             }
             else
