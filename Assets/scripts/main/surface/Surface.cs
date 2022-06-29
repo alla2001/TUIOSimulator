@@ -290,6 +290,10 @@ public class Surface : MonoBehaviour
                 }
                 else if (pointer.Type == Pointer.PointerType.Object)
                 {
+                    if (pointer.Id == MovementController.instance.id)
+                    {
+                        MovementController.instance.UpadteRotation(pointer);
+                    }
                     UpdateSurfaceObject(pointer as ObjectPointer);
                 }
             }
