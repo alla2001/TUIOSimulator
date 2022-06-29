@@ -291,7 +291,6 @@ public class Surface : MonoBehaviour
                 else if (pointer.Type == Pointer.PointerType.Object)
                 {
                     UpdateSurfaceObject(pointer as ObjectPointer);
-                    if (pointer.Id ==)
                 }
             }
             else
