@@ -26,7 +26,7 @@ public class Surface : MonoBehaviour
     private int topObjectSortOrder;
 
     public BoxCollider2D boxCollider2D;
-
+    public Camera cam;
     private List<RaycastResult> raycastResults = new List<RaycastResult>();
 
     protected void Awake()
@@ -173,13 +173,13 @@ public class Surface : MonoBehaviour
         if (IsScreenPositionOverUI(pointer.Position)) return;
 
         // raycast, only create cursor if no other entities are hit
-        Ray ray = Camera.main.ScreenPointToRay(pointer.Position);
+        Ray ray = cam.ScreenPointToRay(pointer.Position);
         RaycastHit2D hit = Physics2D.GetRayIntersection(ray);
         if (hit.collider != null && hit.collider != boxCollider2D) return;
 
         SurfaceCursor sc = Instantiate<SurfaceCursor>(surfaceCursorPrefab);
 
-        Vector2 position = Camera.main.ScreenToWorldPoint(pointer.Position);
+        Vector2 position = cam.ScreenToWorldPoint(pointer.Position);
         sc.transform.localPosition = position;
         sc.transform.SetParent(transform, false);
 
@@ -191,7 +191,7 @@ public class Surface : MonoBehaviour
         SurfaceCursor sc;
         if (surfaceCursors.TryGetValue(pointer.Id, out sc))
         {
-            Vector2 position = Camera.main.ScreenToWorldPoint(pointer.Position);
+            Vector2 position = cam.ScreenToWorldPoint(pointer.Position);
             sc.transform.localPosition = position;
         }
     }
@@ -225,7 +225,7 @@ public class Surface : MonoBehaviour
 
         if (so == null) return;
 
-        Vector2 position = Camera.main.ScreenToWorldPoint(pointer.Position);
+        Vector2 position = cam.ScreenToWorldPoint(pointer.Position);
         float angle = -pointer.Angle * Mathf.Rad2Deg;
 
         so.transform.localPosition = position;
@@ -257,10 +257,7 @@ public class Surface : MonoBehaviour
                 }
                 else if (pointer.Type == Pointer.PointerType.Object)
                 {
-                    if (pointer.Id == MovementController.instance.id)
-                    {
-                        MovementController.instance.UpadteRotation(pointer);
-                    }
+                    MovementController.instance.UpdateRotation(pointer);
 
                     UpdateSurfaceObject(pointer as ObjectPointer, true);
                 }
@@ -290,10 +287,9 @@ public class Surface : MonoBehaviour
                 }
                 else if (pointer.Type == Pointer.PointerType.Object)
                 {
-                    if (pointer.Id == MovementController.instance.id)
-                    {
-                        MovementController.instance.UpadteRotation(pointer);
-                    }
+                    print("Object");
+                    MovementController.instance.UpdateRotation(pointer);
+                    
                     UpdateSurfaceObject(pointer as ObjectPointer);
                 }
             }

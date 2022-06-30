@@ -9,7 +9,7 @@ namespace TUIOSimulator {
 
 		// client
 		public const string defaultIPAddress = "127.0.0.1";
-		public const int defaultPort = 3333;
+		public const int defaultPort = 33333;
 
 		public static IPAddress ipAddress { get; private set; }
 		public static int port { get; private set; }
@@ -20,7 +20,7 @@ namespace TUIOSimulator {
 
 		// server
 		public static string localIPAddresses { get; private set; }
-		public const int defaultListenPort = 33333;
+		public const int defaultListenPort = 3333;
 		public static int listenPort { get; private set; }
 
 		public static bool listen { get; private set; }

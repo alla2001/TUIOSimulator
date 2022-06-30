@@ -17,10 +17,11 @@ public class MovementController : MonoBehaviour
         }
     }
 
-    public void UpadteRotation(Pointer p)
+    public void UpdateRotation(Pointer p)
     {
-        transform.eulerAngles = new Vector3(0, ((ObjectPointer)p).Angle, 0);
-        transform.position = p.Position;
+        print(((ObjectPointer)p).Angle);
+        transform.eulerAngles = new Vector3(0, ((ObjectPointer)p).Angle*50, 0);
+      
     }
 
     // Start is called before the first frame update
