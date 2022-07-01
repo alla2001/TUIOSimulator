@@ -6,8 +6,8 @@ using TouchScript.InputSources;
 
 public class MovementController : MonoBehaviour
 {
-    public int rotationId = 6;
-    public int PositionId = 6;
+    public int objectMovementId = 1;
+
     public static MovementController instance;
     public Camera cam;
 
@@ -21,13 +21,11 @@ public class MovementController : MonoBehaviour
 
     public void UpdatePoint(Pointer p)
     {
-        if (p.Id == rotationId)
+        if (p.Id == objectMovementId && ZoneLimite.instance.OnMap(p.Position))
         {
-            transform.eulerAngles = new Vector3(0, -((ObjectPointer)p).Angle * Mathf.Rad2Deg, 0);
-        }
-        else if (p.Id == PositionId)
-        {
-            transform.position = ZoneLimite.instance.GetPointInZone(p.Position, new Vector2(Screen.width, Screen.height));
+            ZoneLimite.instance.RotatePlayerIcon(((ObjectPointer)p).Angle * Mathf.Rad2Deg);
+            transform.eulerAngles = new Vector3(0, ((ObjectPointer)p).Angle * Mathf.Rad2Deg, 0);
+            transform.position = ZoneLimite.instance.GetPointInZone(cam.ScreenToViewportPoint(p.Position));
         }
     }
 
