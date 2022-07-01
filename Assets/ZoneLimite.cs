@@ -18,12 +18,18 @@ public class ZoneLimite : MonoBehaviour
             Destroy(this);
     }
 
+    private Vector2 posOnMap;
+
     public bool OnMap(Vector2 screenPos)
     {
-        Vector2 mapPos = Map.rectTransform.position + new Vector3(Screen.width / 2, Screen.height / 2, 0);
-        Vector3 posOnMap = screenPos - mapPos;
+        BoxCollider2D collider = Map.GetComponent<BoxCollider2D>();
+        Vector2 mapPos = Map.rectTransform.localPosition + new Vector3(Screen.width / 2, Screen.height / 2, 0);
 
-        normlizedPosOnMap = new Vector2(posOnMap.x / Map.rectTransform.rect.width, posOnMap.y / Map.rectTransform.rect.height);
+        posOnMap = screenPos - mapPos;
+
+        Vector2 posOnCollider = (posOnMap - (collider.offset)) + collider.size / 2;
+        print(posOnCollider);
+        normlizedPosOnMap = new Vector2(posOnCollider.x / collider.size.x, posOnCollider.y / collider.size.y);
 
         if (normlizedPosOnMap.x >= 0 &&
             normlizedPosOnMap.x <= 1 &&
@@ -42,18 +48,21 @@ public class ZoneLimite : MonoBehaviour
 
     public Vector3 GetPointInZone(Vector2 screenPos)
     {
-        Vector2 temp = new Vector2(Mathf.Clamp(normlizedPosOnMap.x, 0, 1), Mathf.Clamp(normlizedPosOnMap.y, 0, 1));
-        Player.rectTransform.localPosition = new Vector3(
-            temp.x * Map.rectTransform.rect.width,
-            temp.y * Map.rectTransform.rect.height, 0);
+        Player.rectTransform.localPosition = posOnMap;
 
         Vector3 center = transform.TransformPoint(GetComponent<BoxCollider>().center);
         BoxCollider collider = GetComponent<BoxCollider>();
         Vector3 pos = new Vector3(
-            center.x - collider.bounds.size.x / 2 + collider.bounds.size.x * temp.x,
+            center.x - collider.bounds.size.x / 2 + collider.bounds.size.x * normlizedPosOnMap.x,
            MovementController.instance.transform.position.y,
-          center.z - collider.bounds.size.z / 2 + collider.bounds.size.z * temp.y);
+          center.z - collider.bounds.size.z / 2 + collider.bounds.size.z * normlizedPosOnMap.y);
 
         return pos;
+    }
+
+    private void Update()
+    {
+        Vector2 mapPos = Map.rectTransform.localPosition + new Vector3(Screen.width / 2, Screen.height / 2, 0);
+        //print(mapPos);
     }
 }

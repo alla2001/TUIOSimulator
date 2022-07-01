@@ -108,15 +108,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.5
+    agentRadius: 0.23
     agentHeight: 2
-    agentSlope: 45
-    agentClimb: 0.4
+    agentSlope: 20.6
+    agentClimb: 0.23
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.16666667
+    cellSize: 0.07666667
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -124,7 +124,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 02b473223bea1684abbde44e7bc68998, type: 2}
 --- !u!1 &33557572
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: ef69f87bec8453d4da50dee039a84d26, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: ef69f87bec8453d4da50dee039a84d26, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -4989,10 +4989,10 @@ RectTransform:
   m_Father: {fileID: 1720724102}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -260.32}
-  m_SizeDelta: {x: -730.99, y: -540.643}
+  m_SizeDelta: {x: 1189.01, y: 539.357}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &601960193
 MonoBehaviour:
@@ -5042,7 +5042,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 2.1915894, y: 15.648758}
+  m_Offset: {x: -2.5562134, y: 15.648773}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5053,7 +5053,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1159.9181, y: 425.18912}
+  m_Size: {x: 1159.9181, y: 425.1891}
   m_EdgeRadius: 0
 --- !u!1001 &628846839
 PrefabInstance:
@@ -5410,6 +5410,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640550720}
   m_CullTransparentMesh: 1
+--- !u!1 &650842842 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8579339374343424301, guid: 086158474621c794abd9395e5fdb6230,
+    type: 3}
+  m_PrefabInstance: {fileID: 1040598777}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &683811144
 GameObject:
   m_ObjectHideFlags: 0
@@ -16117,7 +16123,7 @@ PrefabInstance:
     - target: {fileID: 8579339374343424470, guid: 086158474621c794abd9395e5fdb6230,
         type: 3}
       propertyPath: field of view
-      value: 118.9
+      value: 92.1
       objectReference: {fileID: 0}
     - target: {fileID: 8579339374343424470, guid: 086158474621c794abd9395e5fdb6230,
         type: 3}
@@ -16134,6 +16140,11 @@ PrefabInstance:
       propertyPath: m_TargetTexture
       value: 
       objectReference: {fileID: 8400000, guid: b72db94de9b6dfd4ea19ce2fade2b92b, type: 2}
+    - target: {fileID: 8579339374343424470, guid: 086158474621c794abd9395e5fdb6230,
+        type: 3}
+      propertyPath: near clip plane
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 8579339374343424470, guid: 086158474621c794abd9395e5fdb6230,
         type: 3}
       propertyPath: m_OcclusionCulling
@@ -18349,7 +18360,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1560194684}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1560194686
 Camera:
   m_ObjectHideFlags: 0
@@ -18726,7 +18737,7 @@ RectTransform:
   m_GameObject: {fileID: 1666305829}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7.856346, y: 7.856346, z: 7.856346}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 601960192}
@@ -18734,7 +18745,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4612, y: -183.1513}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 143.294, y: 143.294}
   m_Pivot: {x: 0.5, y: 0.20139721}
 --- !u!114 &1666305831
@@ -19440,7 +19451,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1040598777}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 650842842}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e5768c36d1bb4acea50bd233372843a, type: 3}
@@ -19458,6 +19469,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1040598777}
   m_PrefabAsset: {fileID: 0}
+--- !u!195 &1746336286
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650842842}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 0
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1.58
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1748295947
 GameObject:
   m_ObjectHideFlags: 0
