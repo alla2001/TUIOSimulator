@@ -1,0 +1,4 @@
+repository "TUIOSimulator"
+  path "/"
+    br "/main"
+    co "/main"

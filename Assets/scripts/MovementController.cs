@@ -25,7 +25,7 @@ public class MovementController : MonoBehaviour
 
     public void UpdatePoint(Pointer p)
     {
-        if (/*p.Id == objectMovementId &&*/ ZoneLimite.instance.OnMap(p.Position))
+        if (ZoneLimite.instance.OnMap(p.Position))
         {
             ZoneLimite.instance.RotatePlayerIcon(((ObjectPointer)p).Angle * Mathf.Rad2Deg);
             transform.eulerAngles = new Vector3(0, ((ObjectPointer)p).Angle * Mathf.Rad2Deg, 0);
@@ -33,6 +33,19 @@ public class MovementController : MonoBehaviour
                 NavMeshAgent.SetDestination(ZoneLimite.instance.GetPointInZone(cam.ScreenToViewportPoint(p.Position)));
             else
                 transform.position = ZoneLimite.instance.GetPointInZone(cam.ScreenToViewportPoint(p.Position));
+        }
+    }
+
+    public void MoveTo(Vector2 mapPos, float angle)
+    {
+        if (ZoneLimite.instance.OnMap(mapPos))
+        {
+            ZoneLimite.instance.RotatePlayerIcon(angle * Mathf.Rad2Deg);
+            transform.eulerAngles = new Vector3(0, angle * Mathf.Rad2Deg, 0);
+            if (useNavMesh)
+                NavMeshAgent.SetDestination(ZoneLimite.instance.GetPointInZone(mapPos));
+            else
+                transform.position = ZoneLimite.instance.GetPointInZone(mapPos);
         }
     }
 

@@ -25,7 +25,9 @@ public class Surface : MonoBehaviour
     private List<SurfaceObject> surfaceObjects;
     private int topObjectSortOrder;
 
+    public GameObject Canvas;
     public BoxCollider2D boxCollider2D;
+
     public Camera cam;
     private List<RaycastResult> raycastResults = new List<RaycastResult>();
 
@@ -78,19 +80,19 @@ public class Surface : MonoBehaviour
         Vector3 spawnPosition = new Vector3(6f, 4.375f, 0f);
         surfaceObjects = new List<SurfaceObject>(spawnObjectCount);
 
-        for (int i = 0; i < spawnObjectCount; i++)
-        {
-            SurfaceObject so = Instantiate<SurfaceObject>(surfaceObjectPrefab);
-            surfaceObjects.Add(so);
-
-            so.transform.localPosition = spawnPosition;
-            so.transform.SetParent(transform, false);
-
-            so.Init(i);
-        }
-
         LayoutSurfaceObjects();
         SortSurfaceObjects();
+    }
+
+    public void CreatObject(Vector2 screenPos, int id)
+    {
+        SurfaceObject so = Instantiate<SurfaceObject>(surfaceObjectPrefab);
+        surfaceObjects.Add(so);
+
+        so.transform.localPosition = screenPos;
+        so.transform.SetParent(Canvas.transform, false);
+
+        so.Init(id);
     }
 
     private void LayoutSurfaceObjects()
@@ -108,22 +110,22 @@ public class Surface : MonoBehaviour
 
     private void SortSurfaceObjects()
     {
-        for (int i = 0; i < surfaceObjects.Count; i++)
-        {
-            surfaceObjects[i].spriteRenderer.sortingOrder = i;
-        }
+        //for (int i = 0; i < surfaceObjects.Count; i++)
+        //{
+        //    surfaceObjects[i].spriteRenderer.sortingOrder = i;
+        //}
 
-        topObjectSortOrder = surfaceObjects.Count - 1;
+        //topObjectSortOrder = surfaceObjects.Count - 1;
     }
 
     private void NormaliseSurfaceObjectsSorting()
     {
-        for (int i = 0; i < surfaceObjects.Count; i++)
-        {
-            surfaceObjects[i].spriteRenderer.sortingOrder %= surfaceObjects.Count;
-        }
+        //for (int i = 0; i < surfaceObjects.Count; i++)
+        //{
+        //    surfaceObjects[i].spriteRenderer.sortingOrder %= surfaceObjects.Count;
+        //}
 
-        topObjectSortOrder = surfaceObjects.Count - 1;
+        //topObjectSortOrder = surfaceObjects.Count - 1;
     }
 
     public void ResetSurfaceObjects()
@@ -223,12 +225,12 @@ public class Surface : MonoBehaviour
     {
         SurfaceObject so = surfaceObjects.Find(s => s.id == pointer.ObjectId);
 
-        if (so == null) return;
+        if (so == null) CreatObject(pointer.Position, pointer.ObjectId);
 
-        Vector2 position = cam.ScreenToWorldPoint(pointer.Position);
+        Vector2 position = (pointer.Position / new Vector2(Screen.width, Screen.height)) * Canvas.GetComponent<RectTransform>().rect.size;
         float angle = -pointer.Angle * Mathf.Rad2Deg;
 
-        so.transform.localPosition = position;
+        so.transform.localPosition = position - Canvas.GetComponent<RectTransform>().rect.size / 2;
         so.transform.eulerAngles = new Vector3(0f, 0f, angle);
 
         if (moveToTop) ShowSurfaceObjectOnTop(so);
@@ -238,7 +240,7 @@ public class Surface : MonoBehaviour
     {
         if (++topObjectSortOrder >= short.MaxValue) NormaliseSurfaceObjectsSorting();
 
-        so.spriteRenderer.sortingOrder = ++topObjectSortOrder;
+        // so.spriteRenderer.sortingOrder = ++topObjectSortOrder;
     }
 
     //
@@ -287,7 +289,6 @@ public class Surface : MonoBehaviour
                 }
                 else if (pointer.Type == Pointer.PointerType.Object)
                 {
-                    print("objects");
                     MovementController.instance.UpdatePoint(pointer);
 
                     UpdateSurfaceObject(pointer as ObjectPointer);
