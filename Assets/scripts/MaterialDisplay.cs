@@ -11,6 +11,8 @@ public class MaterialDisplay : MonoBehaviour
     public List<GameObject> materials;
     public static MaterialDisplay instance;
     public CustomizableObjects currentSelected;
+    public float margin;
+    public float Ypos;
 
     private void Awake()
     {
@@ -25,16 +27,20 @@ public class MaterialDisplay : MonoBehaviour
         ClearMaterials();
         int i = 0;
         currentSelected = selected;
-        foreach (Material mat in style.materials)
+        foreach (MaterialSO mat in style.materials)
         {
             GameObject temp = Instantiate(matUI, matHolder.transform);
             temp.GetComponent<RectTransform>().localPosition = Vector3.zero;
-            temp.GetComponent<RectTransform>().localPosition = new Vector3(0,
-                 matHolder.GetComponent<RectTransform>().rect.height / 2 - (temp.GetComponent<RectTransform>().rect.height / 2 +
-                temp.GetComponent<RectTransform>().rect.height * i), 0);
+            float posx = -matHolder.GetComponent<RectTransform>().rect.width / 2 + (temp.GetComponent<RectTransform>().rect.width / 2 +
+                (margin * (i + 1)) +
+                temp.GetComponent<RectTransform>().rect.width * i);
+
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(posx, Ypos
+              , 0);
             materials.Add(temp);
-            temp.GetComponent<customizableMaterial>().material = mat;
-            temp.GetComponentInChildren<TextMeshProUGUI>().text = mat.name;
+
+            temp.GetComponent<customizableMaterial>().SetMaterialInfo(mat.Image, mat.name, mat.material);
+
             i++;
         }
     }

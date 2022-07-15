@@ -5,5 +5,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Style", menuName = "Style", order = 0)]
 public class StyleSo : ScriptableObject
 {
-    public List<Material> materials = new List<Material>();
+    public List<MaterialSO> materials = new List<MaterialSO>();
 }

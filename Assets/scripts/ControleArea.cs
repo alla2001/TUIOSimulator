@@ -11,7 +11,6 @@ public class ControleArea : MonoBehaviour
     private bool inZone = false;
     public TextMeshProUGUI text;
     public SurfaceObject currentObject;
-    public float waitHighlight = 3f;
 
     private void Awake()
     {
@@ -46,21 +45,10 @@ public class ControleArea : MonoBehaviour
         if (other.CompareTag("Controller") && inZone)
         {
             float value = Vector3.Angle(other.transform.up, prevDir);
-            if (value > 0)
-            {
-                StopAllCoroutines();
-                StartCoroutine(WaitHighlight());
-            }
+
             ChangeValue(value * AngleDir(prevDir, other.transform.up, Vector3.forward));
             prevDir = other.transform.up;
         }
-    }
-
-    public IEnumerator WaitHighlight()
-    {
-        currentObject.EnableDot();
-        yield return new WaitForSeconds(waitHighlight);
-        currentObject.DisableDot();
     }
 
     private float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)

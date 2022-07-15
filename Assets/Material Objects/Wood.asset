@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adc4a1bc3fb070c4194a3641b6fd3d00, type: 3}
-  m_Name: Table
+  m_Script: {fileID: 11500000, guid: 070a844e85c6ed74db6b3230949e4111, type: 3}
+  m_Name: Wood
   m_EditorClassIdentifier: 
-  materials:
-  - {fileID: 11400000, guid: 154f9f7fca2ce6743ba48e5900e9bc24, type: 2}
-  - {fileID: 11400000, guid: 62de955ebb3183f4b8ebd8dd65c5096f, type: 2}
+  material: {fileID: 2100000, guid: f083a7a76ccc3464ab98497f42c72c07, type: 2}
+  Image: {fileID: 2800000, guid: 30b3db553697b11458a0aeee777d5efd, type: 3}

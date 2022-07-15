@@ -226,12 +226,16 @@ public class Surface : MonoBehaviour
         SurfaceObject so = surfaceObjects.Find(s => s.id == pointer.ObjectId);
 
         if (so == null) CreatObject(pointer.Position, pointer.ObjectId);
-
+        so = surfaceObjects.Find(s => s.id == pointer.ObjectId);
         Vector2 position = (pointer.Position / new Vector2(Screen.width, Screen.height)) * Canvas.GetComponent<RectTransform>().rect.size;
         float angle = -pointer.Angle * Mathf.Rad2Deg;
 
         so.transform.localPosition = position - Canvas.GetComponent<RectTransform>().rect.size / 2;
-        so.transform.eulerAngles = new Vector3(0f, 0f, angle);
+
+        if (so.prevAngle != angle)
+        {
+            so.OnChangedAngel(angle);
+        }
 
         if (moveToTop) ShowSurfaceObjectOnTop(so);
     }
@@ -259,7 +263,10 @@ public class Surface : MonoBehaviour
                 }
                 else if (pointer.Type == Pointer.PointerType.Object)
                 {
-                    MovementController.instance.UpdatePoint(pointer);
+                    if (MovementController.instance != null)
+                    {
+                        MovementController.instance.UpdatePoint(pointer);
+                    }
 
                     UpdateSurfaceObject(pointer as ObjectPointer, true);
                 }
@@ -289,7 +296,10 @@ public class Surface : MonoBehaviour
                 }
                 else if (pointer.Type == Pointer.PointerType.Object)
                 {
-                    MovementController.instance.UpdatePoint(pointer);
+                    if (MovementController.instance != null)
+                    {
+                        MovementController.instance.UpdatePoint(pointer);
+                    }
 
                     UpdateSurfaceObject(pointer as ObjectPointer);
                 }

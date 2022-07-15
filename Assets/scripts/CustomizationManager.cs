@@ -55,22 +55,26 @@ public class CustomizationManager : MonoBehaviour
 
             float ypos =
                0;
+            float xpos =
+               0;
             if (i % 2 == 0)
             {
                 ypos =
                temp.GetComponent<RectTransform>().rect.height * (i / 2);
+                xpos = 10 * (i / 2);
             }
             else
             {
                 ypos =
                 temp.GetComponent<RectTransform>().rect.height * -((i / 2) + 1);
+                xpos = 10 * ((i / 2) + 1);
             }
             if (currentlySelected == ob)
             {
                 ypos =
               0;
             }
-            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, ypos, 0);
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(xpos, ypos, 0);
 
             temp.GetComponent<CustomButton>().obj = ob;
             temp.GetComponent<Button>().onClick.AddListener(ob.LoadMaterials);
@@ -93,12 +97,11 @@ public class CustomizationManager : MonoBehaviour
 
     public void RemoveObject(CustomizableObjects custmizable)
     {
-        print("null");
         foreach (CustomizableObjects cut in Objects)
         {
             if (cut == custmizable)
             {
-                if (currentlySelected != null && currentlySelected.GetComponent<CustomButton>().obj == cut)
+                if (currentlySelected != null && currentlySelected.refrenceUIButton == cut)
                 {
                     currentlySelected = null;
                 }
