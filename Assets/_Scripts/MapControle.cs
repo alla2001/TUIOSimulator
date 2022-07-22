@@ -4,14 +4,30 @@ using UnityEngine;
 
 public class MapControle : MonoBehaviour
 {
-    private bool inZone = false;
+    public bool inZone = false;
     private BoxCollider boxCollider;
+    public static MapControle instance;
+    public SurfaceObject currentObject;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Controller"))
         {
             inZone = true;
+            currentObject = other.gameObject.GetComponent<SurfaceObject>();
+            other.gameObject.GetComponent<SurfaceObject>().InMap();
         }
     }
 
@@ -20,6 +36,8 @@ public class MapControle : MonoBehaviour
         if (other.CompareTag("Controller"))
         {
             inZone = false;
+            currentObject = null;
+            other.gameObject.GetComponent<SurfaceObject>().OutOffMap();
         }
     }
 

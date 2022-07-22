@@ -2,20 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(SphereCollider))]
 public class ControleArea : MonoBehaviour
 {
     private SphereCollider sphereCollider;
     private Vector3 prevDir;
-    private bool inZone = false;
+    [SerializeField] private bool inZone = false;
     public TextMeshProUGUI text;
     public SurfaceObject currentObject;
+    public Image hilight;
+    public float hilightSpeed = 2f;
 
     private void Awake()
     {
         sphereCollider = GetComponent<SphereCollider>();
-        sphereCollider.radius = (GetComponent<RectTransform>().rect.height / 2) * 0.75f;
+        sphereCollider.radius = (GetComponent<RectTransform>().rect.height / 2) * 0.5f;
         sphereCollider.isTrigger = true;
     }
 
@@ -78,5 +81,17 @@ public class ControleArea : MonoBehaviour
     public virtual void ChangeValue(float value)
     {
         if (text != null) text.text = value.ToString();
+    }
+
+    private void Update()
+    {
+        if (inZone)
+        {
+            hilight.color = Vector4.Lerp(hilight.color, new Color(1, 1, 1, 1), hilightSpeed * Time.deltaTime);
+        }
+        else
+        {
+            hilight.color = Vector4.Lerp(hilight.color, new Color(1, 1, 1, 0), hilightSpeed * Time.deltaTime);
+        }
     }
 }

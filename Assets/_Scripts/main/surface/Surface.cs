@@ -84,7 +84,7 @@ public class Surface : MonoBehaviour
         SortSurfaceObjects();
     }
 
-    public void CreatObject(Vector2 screenPos, int id)
+    public SurfaceObject CreatObject(Vector2 screenPos, int id)
     {
         SurfaceObject so = Instantiate<SurfaceObject>(surfaceObjectPrefab);
         surfaceObjects.Add(so);
@@ -93,6 +93,7 @@ public class Surface : MonoBehaviour
         so.transform.SetParent(Canvas.transform, false);
 
         so.Init(id);
+        return so;
     }
 
     private void LayoutSurfaceObjects()
@@ -225,13 +226,13 @@ public class Surface : MonoBehaviour
     {
         SurfaceObject so = surfaceObjects.Find(s => s.id == pointer.ObjectId);
 
-        if (so == null) CreatObject(pointer.Position, pointer.ObjectId);
-        so = surfaceObjects.Find(s => s.id == pointer.ObjectId);
+        if (so == null) so = CreatObject(pointer.Position, pointer.ObjectId);
+
         Vector2 position = (pointer.Position / new Vector2(Screen.width, Screen.height)) * Canvas.GetComponent<RectTransform>().rect.size;
         float angle = -pointer.Angle * Mathf.Rad2Deg;
 
-        so.transform.localPosition = position - Canvas.GetComponent<RectTransform>().rect.size / 2;
-
+        so.transform.localPosition = pointer.Position - Canvas.GetComponent<RectTransform>().rect.size / 2;
+        print(so.transform.localPosition);
         if (so.prevAngle != angle)
         {
             so.OnChangedAngel(angle);

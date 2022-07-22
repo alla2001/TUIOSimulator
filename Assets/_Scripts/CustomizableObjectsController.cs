@@ -12,11 +12,10 @@ public class CustomizableObjectsController : ControleArea
     public override void ChangeValue(float value)
     {
         tempValue += value;
-        print(value);
-        if (Mathf.Abs(tempValue) > 50)
+
+        if (Mathf.Abs(tempValue) > 20)
         {
-            print("value Changed");
-            customizationManager.changeSelected((tempValue > 0) ? true : false);
+            customizationManager.changeSelected((tempValue < 0) ? true : false);
             tempValue = 0;
         }
 

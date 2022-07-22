@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class CustomizationManager : MonoBehaviour
 {
-    private static List<CustomizableObjects> Objects = new List<CustomizableObjects>();
+    public List<CustomizableObjects> Objects = new List<CustomizableObjects>();
 
     public static CustomizationManager Instance;
     public GameObject button;
@@ -50,29 +50,30 @@ public class CustomizationManager : MonoBehaviour
     public void UpdateUI()
     {
         int i = 0;
-        foreach (CustomizableObjects cut in Objects)
-        {
-            Destroy(cut.refrenceUIButton);
-        }
+
         foreach (CustomizableObjects ob in Objects)
         {
-            GameObject temp = Instantiate(button, Holder.transform);
+            if (ob.refrenceUIButton == null)
+            {
+                GameObject temp = Instantiate(button, Holder.transform);
 
-            temp.GetComponent<RectTransform>().localPosition = Vector3.zero;
+                temp.GetComponent<RectTransform>().localPosition = Vector3.zero;
 
-            float ypos =
-               0;
+                float ypos =
+                   0;
 
-            ypos = -Holder.GetComponent<RectTransform>().rect.height / 2 +
-              temp.GetComponent<RectTransform>().rect.height * i;
+                ypos = -Holder.GetComponent<RectTransform>().rect.height / 2 +
+                  temp.GetComponent<RectTransform>().rect.height * i;
 
-            ob.refrenceUIButton = temp;
+                ob.refrenceUIButton = temp.GetComponent<CustomButton>();
 
-            temp.GetComponent<RectTransform>().localPosition = new Vector3(0, ypos, 0);
+                temp.GetComponent<RectTransform>().localPosition = new Vector3(0, ypos, 0);
 
-            temp.GetComponent<CustomButton>().obj = ob;
+                temp.GetComponent<CustomButton>().obj = ob;
 
-            temp.GetComponentInChildren<TextMeshProUGUI>().text = ob.name;
+                temp.GetComponentInChildren<TextMeshProUGUI>().text = ob.name;
+            }
+
             if (currentlySelected == null)
             {
                 currentlySelected = ob;
@@ -156,31 +157,25 @@ public class CustomizationManager : MonoBehaviour
         //}
     }
 
-    public bool Contrains(CustomizableObjects custmizable)
+    public bool Contains(CustomizableObjects custmizable)
     {
-        foreach (CustomizableObjects cut in Objects)
-        {
-            if (cut == custmizable)
-                return true;
-        }
-        return false;
+        return Objects.Contains(custmizable);
     }
 
     public void RemoveObject(CustomizableObjects custmizable)
     {
-        foreach (CustomizableObjects cut in Objects)
+        if (Objects.Contains(custmizable))
         {
-            if (cut == custmizable)
+            if (currentlySelected != null && currentlySelected == custmizable)
             {
-                if (currentlySelected != null && currentlySelected == cut)
-                {
-                    currentlySelected = null;
-                }
-                Destroy(cut.refrenceUIButton);
-                Objects.Remove(cut);
-                break;
+                currentlySelected.UnHilight(unhilighImage);
+                currentlySelected = null;
             }
+            custmizable.refrenceUIButton.EndLife();
+            custmizable.refrenceUIButton = null;
+            Objects.Remove(custmizable);
         }
+
         UpdateUI();
     }
 }

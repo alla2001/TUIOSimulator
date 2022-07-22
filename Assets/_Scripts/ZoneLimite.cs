@@ -6,11 +6,19 @@ using UnityEngine.UI;
 public class ZoneLimite : MonoBehaviour
 {
     public static ZoneLimite instance;
-    public Image Player;
+
     public RawImage Map;
     private Vector3 normlizedPosOnMap;
     [SerializeField] private BoxCollider2D boxCollider;
     public Camera topDownCamera;
+    public List<Location> locations = new List<Location>();
+
+    [System.Serializable]
+    public class Location
+    {
+        public string name;
+        public Transform pos;
+    }
 
     private void Awake()
     {
@@ -18,6 +26,18 @@ public class ZoneLimite : MonoBehaviour
             instance = this;
         else
             Destroy(this);
+    }
+
+    public void LoadLocation(string name)
+    {
+        foreach (Location loc in locations)
+        {
+            if (loc.name == name)
+            {
+                MovementController.instance.transform.position = loc.pos.position;
+                break;
+            }
+        }
     }
 
     private void Start()
@@ -47,14 +67,12 @@ public class ZoneLimite : MonoBehaviour
 
     public void RotatePlayerIcon(float z)
     {
-        Player.rectTransform.eulerAngles = new Vector3(0, 0, -z);
     }
 
     private Ray r;
 
     public Vector3 GetPointInZone(Vector2 screenPos)
     {
-        Player.rectTransform.localPosition = posOnMap;
         //print(normlizedPosOnMap * new Vector2(topDownCamera.pixelHeight, topDownCamera.scaledPixelWidth));
         r = topDownCamera.ScreenPointToRay(normlizedPosOnMap * new Vector2(topDownCamera.pixelWidth, topDownCamera.pixelHeight));
         RaycastHit hit;

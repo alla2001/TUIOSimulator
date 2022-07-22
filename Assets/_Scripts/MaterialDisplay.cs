@@ -11,8 +11,10 @@ public class MaterialDisplay : MonoBehaviour
     public List<GameObject> materials;
     public static MaterialDisplay instance;
     public CustomizableObjects currentSelected;
+    public customizableMaterial currentSelectedMaterial;
     public float margin;
     public float Ypos;
+    public ScrollRect slider;
 
     private void Awake()
     {
@@ -31,23 +33,38 @@ public class MaterialDisplay : MonoBehaviour
         {
             GameObject temp = Instantiate(matUI, matHolder.transform);
             temp.GetComponent<RectTransform>().localPosition = Vector3.zero;
-            float posx = -matHolder.GetComponent<RectTransform>().rect.width / 2 + (temp.GetComponent<RectTransform>().rect.width / 2 +
+            float posx = (temp.GetComponent<RectTransform>().rect.width / 2 +
                 (margin * (i + 1)) +
                 temp.GetComponent<RectTransform>().rect.width * i);
-
-            temp.GetComponent<RectTransform>().localPosition = new Vector3(posx, Ypos
+            float posy = -matHolder.GetComponent<RectTransform>().rect.height / 2;
+            temp.GetComponent<RectTransform>().localPosition = new Vector3(-temp.GetComponent<RectTransform>().rect.width - 10, posy + Ypos
+              , 0);
+            temp.GetComponentInChildren<customizableMaterial>().targetPos = new Vector3(posx, posy + Ypos
               , 0);
             materials.Add(temp);
 
-            temp.GetComponent<customizableMaterial>().SetMaterialInfo(mat.Image, mat.name, mat.material);
-
+            temp.GetComponentInChildren<customizableMaterial>().SetMaterialInfo(mat.Image, mat.name, mat);
+            if (mat == currentSelected.selectedMaterial)
+            {
+                currentSelectedMaterial = temp.GetComponentInChildren<customizableMaterial>();
+                currentSelectedMaterial.Hilight();
+            }
             i++;
         }
+        slider.horizontalNormalizedPosition = -10;
     }
 
-    public void SetSelectedMaterial(Material mat)
+    public void SetSelectedMaterial(MaterialSO mat, customizableMaterial matUi)
     {
-        currentSelected.GetComponent<MeshRenderer>().material = mat;
+        if (currentSelectedMaterial != null)
+        {
+            currentSelectedMaterial.UnHilight();
+            currentSelected.selectedMaterial = mat;
+        }
+
+        currentSelectedMaterial = matUi;
+        currentSelectedMaterial.Hilight();
+        currentSelected.GetComponent<MeshRenderer>().material = mat.material;
     }
 
     public void ClearMaterials()

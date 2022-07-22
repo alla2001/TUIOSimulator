@@ -29,3 +29,5 @@ Thumbs.db
 
 # project
 /[Ee]xported[Oo]bj/
+.vs/TUIOSimulator/project-colors.json
+.vsconfig

@@ -13,6 +13,8 @@ public class MovementController : MonoBehaviour
     public static MovementController instance;
     public Camera cam;
     private NavMeshAgent NavMeshAgent;
+    public Section ownerSection;
+    public GameObject CameraHolder;
 
     private void Awake()
     {
@@ -23,9 +25,34 @@ public class MovementController : MonoBehaviour
         }
     }
 
+    public void ChangeFov(float amount)
+    {
+        GetComponentInChildren<Camera>().fieldOfView = Mathf.Clamp(GetComponentInChildren<Camera>().fieldOfView + amount, 40, 95);
+    }
+
+    public void RotateY(float amount)
+    {
+        if (CameraHolder.transform.eulerAngles.x + amount > 320 || CameraHolder.transform.eulerAngles.x + amount < 40)
+        {
+            CameraHolder.transform.eulerAngles = new Vector3(CameraHolder.transform.eulerAngles.x + amount,
+          CameraHolder.transform.eulerAngles.y, CameraHolder.transform.eulerAngles.z);
+        }
+        else
+        if (Mathf.Abs(CameraHolder.transform.eulerAngles.x + amount - 320) < Mathf.Abs(CameraHolder.transform.eulerAngles.x + amount - 40))
+        {
+            CameraHolder.transform.eulerAngles = new Vector3(320,
+          CameraHolder.transform.eulerAngles.y, CameraHolder.transform.eulerAngles.z);
+        }
+        else
+        {
+            CameraHolder.transform.eulerAngles = new Vector3(40,
+             CameraHolder.transform.eulerAngles.y, CameraHolder.transform.eulerAngles.z);
+        }
+    }
+
     public void UpdatePoint(Pointer p)
     {
-        if (ZoneLimite.instance.OnMap(p.Position))
+        if (ZoneLimite.instance.OnMap(p.Position) && MapControle.instance.inZone && MapControle.instance.currentObject.state == SurfaceObject.ObjcetState.movement)
         {
             ZoneLimite.instance.RotatePlayerIcon(((ObjectPointer)p).Angle * Mathf.Rad2Deg);
             transform.eulerAngles = new Vector3(0, ((ObjectPointer)p).Angle * Mathf.Rad2Deg, 0);

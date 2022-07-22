@@ -8,10 +8,18 @@ using UnityEngine.UI;
 
 public class SurfaceObject : MonoBehaviour, ISurfaceEntity
 {
+    public enum ObjcetState
+    {
+        movement, fov, lookup
+    }
+
     public Surface surface { get; protected set; }
     public GameObject Dot;
     public GameObject UI;
+    public GameObject fovUI;
+    public GameObject LookyUi;
     public Image degrees;
+    public GameObject OnMapUi;
 
     public ITUIOEntity tuioEntity
     { get { return tuioObject; } }
@@ -34,6 +42,9 @@ public class SurfaceObject : MonoBehaviour, ISurfaceEntity
     public Collider2D collider2d { get; protected set; }
 
     private PressGesture pressGesture;
+    public ObjcetState state = ObjcetState.movement;
+    private Vector3 prevDir;
+    private bool inMap;
 
     protected void Awake()
     {
@@ -48,20 +59,102 @@ public class SurfaceObject : MonoBehaviour, ISurfaceEntity
         pressGesture.Pressed += OnPressed;
     }
 
+    public void ChangeState(int newState)
+    {
+        state = (ObjcetState)newState;
+        switch (state)
+        {
+            case ObjcetState.movement:
+                OnMapUi.SetActive(true);
+                fovUI.SetActive(false);
+                LookyUi.SetActive(false);
+                break;
+
+            case ObjcetState.fov:
+
+                OnMapUi.SetActive(false);
+                fovUI.SetActive(true);
+                LookyUi.SetActive(false);
+                break;
+
+            default:
+                OnMapUi.SetActive(false);
+                fovUI.SetActive(false);
+                LookyUi.SetActive(true);
+                break;
+        }
+    }
+
     protected void Update()
     {
         if (!rotating)
         {
             degrees.transform.rotation = UI.transform.rotation;
         }
+        if (inMap)
+        {
+            if (state == ObjcetState.fov)
+            {
+                float value = Vector3.Angle(transform.up, prevDir);
+
+                MovementController.instance.ChangeFov(value * 0.02f * AngleDir(prevDir, UI.transform.up, Vector3.forward));
+                prevDir = UI.transform.up;
+            }
+            if (state == ObjcetState.lookup)
+            {
+                float value = Vector3.Angle(transform.up, prevDir);
+
+                MovementController.instance.RotateY(value * 0.01f * AngleDir(prevDir, UI.transform.up, Vector3.forward));
+                prevDir = UI.transform.up;
+            }
+        }
+
         if (surface != null)
             UpdateObject();
+    }
+
+    private void LateUpdate()
+    {
+        print(" late update :" + GetComponent<RectTransform>().localPosition);
+    }
+
+    private float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
+    {
+        Vector3 perp = Vector3.Cross(fwd, targetDir);
+        float dir = Vector3.Dot(perp, up);
+
+        if (dir > 0)
+        {
+            return 1;
+        }
+        else if (dir < 0)
+        {
+            return -1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     protected void OnDisable()
     {
         pressGesture.Pressed -= OnPressed;
         RemoveFromSurface();
+    }
+
+    public void InMap()
+    {
+        inMap = true;
+        OnMapUi.SetActive(true);
+    }
+
+    public void OutOffMap()
+    {
+        ChangeState(0);
+        inMap = false;
+        OnMapUi.SetActive(false);
+        fovUI.SetActive(false);
     }
 
     //
@@ -135,8 +228,23 @@ public class SurfaceObject : MonoBehaviour, ISurfaceEntity
         {
             i = 0;
             degrees.transform.eulerAngles = new Vector3(0f, 0f, angle);
+            prevAngle = angle;
         }
 
+        if (angle > 0 && prevAngle < 0)
+        {
+            prevAngle = angle;
+            degrees.fillClockwise = false;
+            degrees.fillAmount = 0;
+            degrees.transform.eulerAngles = new Vector3(0f, 0f, angle);
+        }
+        if (angle < 0 && prevAngle > 0)
+        {
+            prevAngle = angle;
+            degrees.fillClockwise = false;
+            degrees.fillAmount = 0;
+            degrees.transform.eulerAngles = new Vector3(0f, 0f, angle);
+        }
         i += (Mathf.Abs(prevAngle - angle) / 360);
 
         degrees.fillAmount += (Mathf.Abs(prevAngle - angle) / 360);
@@ -144,6 +252,7 @@ public class SurfaceObject : MonoBehaviour, ISurfaceEntity
         StopAllCoroutines();
         StartCoroutine(WaitHighlight());
         UI.transform.eulerAngles = new Vector3(0f, 0f, angle);
+
         prevAngle = angle;
     }
 
